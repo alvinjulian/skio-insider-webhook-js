@@ -1,0 +1,318 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "AuditEventType": {
+            "enum": [
+                "Discount code applied",
+                "Subscription activated",
+                "Subscription cancelled",
+                "Subscription interval/date update",
+                "orderPlaced",
+                "productsUpdated"
+            ],
+            "type": "string"
+        },
+        "SellingPlanInterval": {
+            "description": "Represents valid selling plan interval.",
+            "enum": [
+                "DAY",
+                "MONTH",
+                "WEEK",
+                "YEAR"
+            ],
+            "type": "string"
+        },
+        "UserType": {
+            "enum": [
+                "DashboardUser",
+                "Skio",
+                "StorefrontUser"
+            ],
+            "type": "string"
+        }
+    },
+    "properties": {
+        "domain": {
+            "type": "string"
+        },
+        "eventData": {
+            "anyOf": [
+                {
+                    "properties": {
+                        "shopifyOrderId": {
+                            "type": "string"
+                        },
+                        "shopifyOrderName": {
+                            "type": "string"
+                        },
+                        "subscriptionId": {
+                            "type": "string"
+                        },
+                        "timestamp": {
+                            "type": "string"
+                        },
+                        "userCognitoUsername": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        },
+                        "userEmail": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        },
+                        "userType": {
+                            "$ref": "#/definitions/UserType"
+                        }
+                    },
+                    "type": "object"
+                },
+                {
+                    "properties": {
+                        "subscriptionId": {
+                            "type": "string"
+                        },
+                        "timestamp": {
+                            "type": "string"
+                        },
+                        "userCognitoUsername": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        },
+                        "userEmail": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        },
+                        "userType": {
+                            "$ref": "#/definitions/UserType"
+                        }
+                    },
+                    "type": "object"
+                },
+                {
+                    "properties": {
+                        "subscriptionId": {
+                            "type": "string"
+                        },
+                        "timestamp": {
+                            "type": "string"
+                        },
+                        "userCognitoUsername": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        },
+                        "userEmail": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        },
+                        "userType": {
+                            "$ref": "#/definitions/UserType"
+                        }
+                    },
+                    "type": "object"
+                },
+                {
+                    "properties": {
+                        "newProducts": {
+                            "items": {
+                                "properties": {
+                                    "price": {
+                                        "type": "number"
+                                    },
+                                    "productTitle": {
+                                        "type": "string"
+                                    },
+                                    "productVariantId": {
+                                        "type": "string"
+                                    },
+                                    "productVariantTitle": {
+                                        "type": "string"
+                                    },
+                                    "quantity": {
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "type": "array"
+                        },
+                        "oldProducts": {
+                            "items": {
+                                "properties": {
+                                    "price": {
+                                        "type": "number"
+                                    },
+                                    "productTitle": {
+                                        "type": "string"
+                                    },
+                                    "productVariantId": {
+                                        "type": "string"
+                                    },
+                                    "productVariantTitle": {
+                                        "type": "string"
+                                    },
+                                    "quantity": {
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "type": "array"
+                        },
+                        "subscriptionId": {
+                            "type": "string"
+                        },
+                        "timestamp": {
+                            "type": "string"
+                        },
+                        "userCognitoUsername": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        },
+                        "userEmail": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        },
+                        "userType": {
+                            "$ref": "#/definitions/UserType"
+                        }
+                    },
+                    "type": "object"
+                },
+                {
+                    "properties": {
+                        "newIntervalAndDate": {
+                            "properties": {
+                                "billingDate": {
+                                    "type": "string"
+                                },
+                                "interval": {
+                                    "$ref": "#/definitions/SellingPlanInterval"
+                                },
+                                "intervalCount": {
+                                    "type": "number"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "oldIntervalAndDate": {
+                            "properties": {
+                                "billingDate": {
+                                    "type": "string"
+                                },
+                                "interval": {
+                                    "$ref": "#/definitions/SellingPlanInterval"
+                                },
+                                "intervalCount": {
+                                    "type": "number"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "skipped": {
+                            "type": "boolean"
+                        },
+                        "subscriptionId": {
+                            "type": "string"
+                        },
+                        "timestamp": {
+                            "type": "string"
+                        },
+                        "userEmail": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        },
+                        "userType": {
+                            "$ref": "#/definitions/UserType"
+                        }
+                    },
+                    "type": "object"
+                },
+                {
+                    "properties": {
+                        "amount": {
+                            "type": "number"
+                        },
+                        "codePlatformId": {
+                            "type": "string"
+                        },
+                        "method": {
+                            "enum": [
+                                "FIXED_VALUE",
+                                "PERCENTAGE"
+                            ],
+                            "type": "string"
+                        },
+                        "redeemCode": {
+                            "type": "string"
+                        },
+                        "subscriptionId": {
+                            "type": "string"
+                        },
+                        "timestamp": {
+                            "type": "string"
+                        },
+                        "type": {
+                            "anyOf": [
+                                {
+                                    "enum": [
+                                        "CANCEL_DISCOUNT",
+                                        "DISCOUNT_CODE",
+                                        "FREE_SHIPPING",
+                                        "GROUP_SUBSCRIPTION",
+                                        "MANUAL_DISCOUNT",
+                                        "PREPAID_DISCOUNT",
+                                        "VOLUME_DISCOUNT"
+                                    ],
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ]
+                        },
+                        "userCognitoUsername": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        },
+                        "userEmail": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        },
+                        "userType": {
+                            "$ref": "#/definitions/UserType"
+                        }
+                    },
+                    "type": "object"
+                }
+            ]
+        },
+        "eventType": {
+            "$ref": "#/definitions/AuditEventType"
+        },
+        "subscriptionId": {
+            "type": "string"
+        }
+    },
+    "type": "object"
+}
