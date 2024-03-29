@@ -44,11 +44,11 @@ app.post('/skio/webhook', (req, res) => {
     const insiderData = transformData(skioData);
 
     // Send the transformed data to Insider
-    sendDataToInsider(insiderData);
+    const response = sendDataToInsider(insiderData);
 
     // Respond with success status
     res.status(200).json({
-        message: 'Webhook received successfully.'
+        message: response
     });
 });
 
