@@ -46,22 +46,15 @@ app.post('/skio/webhook', (req, res) => {
     //     });
     // }
 
-    // Process the data as needed
-    // console.log('Received data from Skio:', skioData);
-
     // Transform the data as needed
-    // const insiderData = transformData(skioData);
+    const insiderData = transformData(skioData.eventName, skioData.properties);
 
     // Send the transformed data to Insider
-    // const response = sendDataToInsider(insiderData);
+    const response = sendDataToInsider(insiderData);
 
     // Respond with success status
-    // res.status(200).json({
-    //     message: req
-    // });
-
     return res.status(200).json({
-        message: 'Success'
+        message: response
     });
 });
 
