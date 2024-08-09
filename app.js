@@ -2,6 +2,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const Ajv = require('ajv');
 require('dotenv').config();
+const axios = require('axios');
+
+// Define the Insider API endpoint
+const endpoint = 'https://unification.useinsider.com/api/user/v1/upsert';
+// Define the partnerName
+const partnerName = process.env.INSIDER_PARTNER_NAME;
+
+// Define the request token
+const requestToken = process.env.INSIDER_UCD_TOKEN;
+
 
 // Import the functions from insider.js
 const { sendDataToInsider, transformData } = require('./insider');
@@ -20,7 +30,7 @@ const ajv = new Ajv();
 app.use(bodyParser.json());
 
 // Route to handle webhook POST requests
-app.post('/skio/webhook', (req, res) => {
+app.post('/skio/webhook', async (req, res) => {
     // Verify that the request contains JSON data
     if (!req.is('application/json')) {
         return res.status(400).json({
@@ -49,13 +59,41 @@ app.post('/skio/webhook', (req, res) => {
     // Transform the data as needed
     const insiderData = transformData(skioData.eventName, skioData.properties);
 
-    // Send the transformed data to Insider
-    const response = sendDataToInsider(insiderData);
+    const stringifiedData = JSON.stringify(insiderData);
 
-    // Respond with success status
-    return res.status(200).json({
-        message: response
-    });
+    // console.log('Insider data:', JSON.stringify(insiderData));
+
+    // Send the transformed data to Insider
+    try {
+        const response = await axios.post(endpoint,insiderData, {headers: {
+            'Content-Type': 'application/json',
+            'X-PARTNER-NAME': partnerName,
+            'X-REQUEST-TOKEN': requestToken
+        }})
+        res.json(response.data);
+    } catch (error) {
+        console.error('Error calling the API:', error);
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            res.status(error.response.status).json({
+                message: 'Error from the external API',
+                details: JSON.stringify(error.response.data),
+            });
+        } else if (error.request) {
+            // The request was made but no response was received
+            res.status(500).json({
+                message: 'No response received from the external API',
+                details: error.request,
+            });
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            res.status(500).json({
+                message: 'Error setting up the request',
+                details: error.message,
+            });
+        }
+    }
 });
 
 app.get('/skio/webhook', (req, res) => {
